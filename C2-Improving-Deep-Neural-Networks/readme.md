@@ -501,16 +501,52 @@ Importance of hyperparameters (roughly):
 
 #### Using an appropriate scale to pick hyperparameters
 
-Search for hyperparameters on a log scale.
+**Uniform Random Sampling vs. Scale-Aware Sampling**
 
-```python
-r = -4 * np.random.rand() # r in [-4,0]
-alpha = 10**r             # alpha in [10^-4, 1]
-```
+* **Uniform Random Sampling (Not Ideal in All Cases):**
+  * Involves randomly selecting values within a specified range.
+  * Might be suitable for simple cases where the range of valid values is intuitive (e.g., number of hidden units within a reasonable range).
 
-It's easy to extend to a more generalized case `[a,b]`.
+* **Scale-Aware Sampling (Recommended):**
+  * Tailors the sampling process to the specific hyperparameter.
+  * Ensures a more balanced exploration of the value space.
 
-As for `beta`, use the same logarithmic scale method for `1-beta`.
+**Sampling Examples**
+
+* **Number of Hidden Units (Linear Scale):**
+  * If a reasonable range is 50-100, uniform random sampling within this range might be appropriate.
+
+* **Number of Layers (Linear or Grid Search):**
+  * If a suitable range is 2-4, uniform random sampling or a grid search (explicitly evaluating 2, 3, and 4) could be reasonable.
+
+**Logarithmic Scale Sampling**
+
+* Crucial for hyperparameters where smaller values have a significant impact compared to larger values.
+* Example: Learning Rate (alpha)
+  * A linear scale search from 0.0001 to 1 would dedicate most resources to exploring 0.1-1, neglecting the potentially impactful lower range (0.0001-0.1).
+  * Logarithmic scale sampling addresses this by assigning more resources to exploring the lower range of values.
+
+**Implementation in Python**
+
+* The code snippet `r = -4 * np.random.rand()` followed by `alpha = 10**r` demonstrates logarithmic scale sampling for learning rate.
+    * `r` is a random number between -4 and 0.
+    * `alpha` is calculated as 10 raised to the power of `r`, resulting in values between 0.0001 and 1.
+
+**Beta for Exponentially Weighted Averages**
+
+* Beta controls the influence of past values in the average.
+* A linear scale search for beta (e.g., 0.9-0.999) is misleading.
+* We want to explore the range of values for (1-beta) which goes from 0.1 to 0.001 (more impactful for smaller values).
+* The sampling method is similar to the logarithmic case, but with reversed placement of large and small values on the scale.
+
+**Key Point**
+
+* Scale-aware sampling ensures efficient exploration of the hyperparameter space by dedicating more resources to regions where small changes can have significant effects.
+
+**Additional Notes**
+
+* Don't worry excessively if you don't choose the perfect scaling initially. Reasonable results can still be achieved, especially with coarse-to-fine search strategies.
+
 
 #### Hyperparameters tuning in practice: Panda vs. Caviar
 
