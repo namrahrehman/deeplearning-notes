@@ -358,18 +358,28 @@ Multi-task learning refers to having one neural network do simultaneously severa
 ![end-to-end](img/end-to-end.png)
 
 #### Whether to use end-to-end deep learning
+**Pros**
 
-Before applying end-to-end deep learning, you need to ask yourself the following question: Do you have enough data to learn a function of the complexity needed to map x and y?
+* **Data-driven learning:** Learns directly from data (X,Y) without human-crafted features (advantage over traditional methods).
+* **Potentially better performance:** Discovers better representations compared to fixed ones (e.g., phonemes).
+* **Simpler workflow:** Less hand-designing required.
 
-*Pro*:
+**Cons**
 
-- *Let the data speak*. By having a pure machine learning approach, the neural network will learn from x to y. It will be able to find which statistics are in the data, rather than being forced to reflect human preconceptions.
-- *Less hand-designing of components needed*. It simplifies the design work flow.
+* **Large data requirements:** Complex mappings (X to Y) often need a lot of data for effective learning.
+* **Excludes potentially useful components:** Injects less human knowledge when data is limited (can be a disadvantage).
 
-*Cons*:
+**Choosing Approach**
 
-- *Large amount of labeled data*. It cannot be used for every problem as it needs a lot of labeled data.
-- *Excludes potentially useful hand-designed component*. Data and any hand-design’s components or features are the 2 main sources of knowledge for a learning algorithm. If the data set is small than a hand-design system is a way to give manual knowledge into the algorithm.
+* **Task complexity:** Simpler tasks (e.g., bone identification) might be suitable for end-to-end with less data.
+* **Data availability:** When data is scarce, consider a modular approach with hand-designed components.
 
+**Real-world Example: Self-driving Car**
+
+* Not ideal for pure end-to-end due to data limitations and complexity.
+* Often uses a modular approach:
+    * Deep learning for perception (car/pedestrian detection).
+    * Motion planning for route selection.
+    * Control algorithms for steering/braking.
 ---
-Notes by Aaron © 2020
+
